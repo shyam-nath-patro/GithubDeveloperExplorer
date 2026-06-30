@@ -14,54 +14,68 @@ let repositories = [];
 searchBtn.addEventListener("click", loadUser);
 sortRepos.addEventListener("change", renderRepos);
 
-async function loadUser(){
+onst GITHUB_TOKEN = "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";
 
-const username = userInput.value.trim();
+const headers = {
+    Authorization: `Bearer ${GITHUB_TOKEN}`,
+    Accept: "application/vnd.github+json"
+};
 
-if(!username){
-showMsg("Please enter a username.");
-return;
-}
+async function loadUser() {
 
-message.innerHTML = "";
-profile.innerHTML = "";
-reposDiv.innerHTML = "";
-chart.innerHTML = "";
+    const username = userInput.value.trim();
 
-try{
+    if (!username) {
+        showMsg("Please enter a username.");
+        return;
+    }
 
-const userRes = await fetch(
-`https://api.github.com/users/${username}`
-);
+    message.innerHTML = "";
+    profile.innerHTML = "";
+    reposDiv.innerHTML = "";
+    chart.innerHTML = "";
 
-if(userRes.status === 404){
-showMsg("GitHub user not found.");
-return;
-}
+    try {
 
-if(userRes.status === 403){
-showMsg("GitHub API rate limit exceeded. Please try later.");
-return;
-}
+        const userRes = await fetch(
+            `https://api.github.com/users/${username}`,
+            {
+                headers
+            }
+        );
 
-const user = await userRes.json();
+        if (userRes.status === 404) {
+            showMsg("GitHub user not found.");
+            return;
+        }
 
-const repoRes = await fetch(user.repos_url);
-repositories = await repoRes.json();
+        if (userRes.status === 403) {
+            showMsg("GitHub API rate limit exceeded.");
+            return;
+        }
 
-renderProfile(user);
-renderRepos();
-renderChart();
+        const user = await userRes.json();
 
-heroSection.style.display = "none";
-repoSection.classList.remove("d-none");
+        const repoRes = await fetch(
+            user.repos_url,
+            {
+                headers
+            }
+        );
 
-}
-catch{
+        repositories = await repoRes.json();
 
-showMsg("Something went wrong.");
+        renderProfile(user);
+        renderRepos();
+        renderChart();
 
-}
+        heroSection.style.display = "none";
+        repoSection.classList.remove("d-none");
+
+    } catch (error) {
+        console.error(error);
+        showMsg("Something went wrong.");
+    }
 
 }
 
