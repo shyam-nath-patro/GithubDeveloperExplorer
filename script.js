@@ -14,7 +14,7 @@ let repositories = [];
 searchBtn.addEventListener("click", loadUser);
 sortRepos.addEventListener("change", renderRepos);
 
-onst GITHUB_TOKEN = "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";
+onst GITHUB_TOKEN = "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";
 
 const headers = {
     Authorization: `Bearer ${GITHUB_TOKEN}`,
