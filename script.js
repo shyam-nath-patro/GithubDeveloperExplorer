@@ -14,7 +14,6 @@ let repositories = [];
 searchBtn.addEventListener("click", loadUser);
 sortRepos.addEventListener("change", renderRepos);
 
-// ⚠️ MAKE SURE TO REPLACE THIS WITH A FRESH GENERATED TOKEN
 const part1 = "ghp_azj2CZgUTVEAjakBU";
 const part2 = "iEK2mSrJNd45n3kQgD8";
 const GITHUB_TOKEN = part1 + part2;
